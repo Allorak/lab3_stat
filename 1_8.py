@@ -1,15 +1,24 @@
+def task1():
+    import pandas as pd
+    from pathlib import Path
+
+    df = pd.read_csv(Path('data/insurance.csv'))
+
+
 def task2():
     import pandas as pd
+    from pathlib import Path
 
-    df = pd.read_csv('data\\insurance.csv')
+    df = pd.read_csv(Path('data/insurance.csv'))
     print(df.describe())
 
 
 def task3():
     import pandas as pd
     import matplotlib.pyplot as plt
+    from pathlib import Path
 
-    df = pd.read_csv('data\\insurance.csv')
+    df = pd.read_csv(Path('data/insurance.csv'))
     df.hist(figsize=(8, 8), edgecolor='black')
     plt.show()
 
@@ -20,8 +29,9 @@ def task4():
     import numpy as np
     import scipy.stats as sts
     import matplotlib.patches as mpt
+    from pathlib import Path
 
-    df = pd.read_csv('data\\insurance.csv')
+    df = pd.read_csv(Path('data/insurance.csv'))
     mean_bmi = np.mean(df['bmi'])
     mode_bmi = sts.mode(df['bmi'])[0]
     median_bmi = np.median(df['bmi'])
@@ -80,8 +90,9 @@ def task4():
 def task5():
     import pandas as pd
     import matplotlib.pyplot as plt
+    from pathlib import Path
 
-    df = pd.read_csv('data\\insurance.csv')
+    df = pd.read_csv(Path('data/insurance.csv'))
     _, plots = plt.subplots(2, 2, figsize=(12, 12))
     plots[0, 0].boxplot(df['age'])
     plots[0, 0].set_title('Возраст')
@@ -101,8 +112,10 @@ def task5():
 def task6():
     import pandas as pd
     import matplotlib.pyplot as plt
+    from pathlib import Path
+    import numpy as np
 
-    df = pd.read_csv('data\\insurance.csv')
+    df = pd.read_csv(Path('data/insurance.csv'))
 
     selections = 300
     sample_sizes = [500, 750, 1000, 1250]
@@ -128,10 +141,10 @@ def task6():
 
 def task7():
     import pandas as pd
-    import matplotlib.pyplot as plt
     import math
+    from pathlib import Path
 
-    df = pd.read_csv('data\\insurance.csv')
+    df = pd.read_csv(Path('data/insurance.csv'))
 
     bmi_std = df['bmi'].std()
     bmi_mean = df['bmi'].mean()
@@ -164,8 +177,19 @@ def task7():
 def task8():
     import pandas as pd
     from pathlib import Path
+    import scipy.stats as sts
+    import seaborn as sns
 
     df = pd.read_csv(Path('data/insurance.csv'))
+
+    normalized_bmi = (df['bmi']-df['bmi'].min())/(df['bmi'].max()-df['bmi'].min())
+    normalized_charges = (df['charges']-df['charges'].min())/(df['charges'].max()-df['charges'].min())
+
+    ks_test_bmi = sts.kstest(normalized_bmi, 'norm')
+    ks_test_charges = sts.kstest(normalized_charges, 'norm')
+
+    print(ks_test_bmi)
+    print(ks_test_charges)
 
 
 if __name__ == '__main__':
