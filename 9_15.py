@@ -29,7 +29,8 @@ def task10_12():
 
     deathCount = 3000
 
-    print(df.describe())
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+        print(df.describe())
 
     print(f'\nСтраны с количеством смертей за день больше {deathCount}:')
     print(df[df['deaths'] > deathCount]['countriesAndTerritories'].unique())
@@ -42,6 +43,9 @@ def task10_12():
 
     df = df.drop_duplicates()
     print(f'Таблица после удаления дубликатов:\n{df.describe()}')
+    '''
+    
+    '''
 
 def task13():
     import pandas as pd
@@ -53,12 +57,17 @@ def task13():
     northwest = df[df['region'] == 'northwest']
     southwest = df[df['region'] == 'southwest']
 
-    print(f"Нормальность по Шапиро-Уилка для Северо-Западной выборки: {sts.shapiro(northwest['bmi'])}")
-    print(f"Нормальность по Шапиро-Уилка для Юго-Западной выборки: {sts.shapiro(southwest['bmi'])}")
+    print(f"Нормальность по Шапиро-Уилка для Северо-Западной выборки: {sts.shapiro(northwest['bmi'].sample(n=40))}")
+    print(f"Нормальность по Шапиро-Уилка для Юго-Западной выборки: {sts.shapiro(southwest['bmi'].sample(n=40))}")
 
     print(f"\nГомогенность по критерию Бартлетта: {sts.bartlett(northwest['bmi'], southwest['bmi'])}")
 
     print(f"\nt-критерий Стьюдента: {sts.ttest_ind(northwest['bmi'], southwest['bmi'])}")
+    '''
+    По тесту Шапиро-Уилка p-значения для обеих выборок сильно больше 0.05, а значит распределния являются нормальными
+    По критерию Бартлетта p-уровень превышает 0.05, следовательно дисперсии выборок примерно одинаковы
+    По t-критерию Стьюдента p-значение ниже 0.05, следовательно выборки принадлежат к разным генеральным совокупностям и их средние значения различны
+    '''
 
 
 def task14():
@@ -74,6 +83,9 @@ def task14():
                              columns=['Сторона', 'Полученное', 'Ожидаемое'])
 
     print(f"Критерий Хи-квадрат: {sts.chisquare(cube_data['Полученное'], cube_data['Ожидаемое'])}")
+    '''
+    Значение p-value сильно превышает 0.05, следовательно распределение является равномерным
+    '''
 
 
 def task15():
@@ -90,6 +102,9 @@ def task15():
     print(f'Данные: {df}\n')
 
     print(f'Критерий Хи-квадрат: {sts.chi2_contingency(df)}')
+    '''
+    p значение сильно меньше 0.05, поэтому переменные являются зависимыми
+    '''
 
 
 if __name__ == '__main__':
@@ -97,4 +112,4 @@ if __name__ == '__main__':
     # task10_12()
     # task13()
     # task14()
-    task15()
+     task15()
