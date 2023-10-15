@@ -216,18 +216,31 @@ def task8():
     import pandas as pd
     from pathlib import Path
     import scipy.stats as sts
-    import seaborn as sns
+    import matplotlib.pyplot as plt
 
     df = pd.read_csv(Path('data/insurance.csv'))
 
-    normalized_bmi = (df['bmi']-df['bmi'].min())/(df['bmi'].max()-df['bmi'].min())
-    normalized_charges = (df['charges']-df['charges'].min())/(df['charges'].max()-df['charges'].min())
-
-    ks_test_bmi = sts.kstest(normalized_bmi, 'norm')
-    ks_test_charges = sts.kstest(normalized_charges, 'norm')
+    ks_test_bmi = sts.kstest(df['bmi'], 'norm', args=(df['bmi'].mean(), df['bmi'].std()))
+    ks_test_charges = sts.kstest(df['charges'], 'norm', args=(df['charges'].mean(), df['charges'].std()))
 
     print(ks_test_bmi)
     print(ks_test_charges)
+
+    _, plots = plt.subplots(1, 2, figsize=(12, 12))
+
+    sts.probplot(df['bmi'], dist='norm', plot=plots[0])
+    plots[0].set_title('ИМТ')
+
+    sts.probplot(df['charges'], dist='norm', plot=plots[1])
+    plots[1].set_title('Расходы')
+
+    plt.show()
+    '''
+    Согласно KS-тесту у распределения индекса массы тела p-значение сильно больше 0.05, следовательно это распределение схоже с нормальным.
+    Аналогичный вывод можно сделать из Q-Q графика для данной выборки: значения расположены вдоль прямой, с небольшой погрешностью по краям
+    
+    Для распределения расходов KS-тест показывает p-значение сильно меньше 0.05, следовательно оно не подчиняется нормальному закону, что также можно наблюдать из Q-Q графика, где все значения сильно отходят от нормальной прямой.
+    '''
 
 
 if __name__ == '__main__':
@@ -235,6 +248,6 @@ if __name__ == '__main__':
     # task3()
     # task4()
     # task5()
-     task6()
+    # task6()
     # task7()
-    # task8()
+    task8()
